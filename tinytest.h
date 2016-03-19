@@ -29,6 +29,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 typedef int (*TinyTestFunc)(void);
 
@@ -59,36 +60,36 @@ typedef struct TinyTestRegistryStruct
   {                                                                     \
     printf("%s:%d expected %s, actual: %s\n",                           \
            __FILE__, __LINE__, #expected, #actual);                     \
-    if ( msg ) printf(msg);                                             \
+    printf("%s", msg);                                                  \
     return 0;                                                           \
   }
 
 #define TINYTEST_EQUAL(expected, actual)                                \
-  TINYTEST_EQUAL_MSG(expected, actual, NULL)
+  TINYTEST_EQUAL_MSG(expected, actual, "")
 
 #define TINYTEST_STR_EQUAL_MSG(expected, actual, msg)                   \
   if ( strcmp((expected), (actual)) )                                   \
   {                                                                     \
     printf("%s:%d expected \"%s\", actual: \"%s\"\n",                   \
            __FILE__, __LINE__, expected, actual);                       \
-    if ( msg ) printf(msg);                                             \
+    printf("%s", msg);                                                  \
     return 0;                                                           \
   }
 
 #define TINYTEST_STR_EQUAL(expected, actual)                            \
-  TINYTEST_STR_EQUAL_MSG(expected, actual, NULL)
+  TINYTEST_STR_EQUAL_MSG(expected, actual, "")
 
 #define TINYTEST_ASSERT_MSG(assertion, msg)                             \
   if ( !(assertion) )                                                   \
   {                                                                     \
     printf("%s:%d assertion failed: \"%s\"\n",                          \
            __FILE__, __LINE__, #assertion);                             \
-    if ( msg ) printf(msg);                                             \
+    printf("%s", msg);                                                  \
     return 0;                                                           \
   }
 
 #define TINYTEST_ASSERT(assertion)                                      \
-  TINYTEST_ASSERT_MSG(assertion, NULL)
+  TINYTEST_ASSERT_MSG(assertion, "")
 
 #define TINYTEST_DECLARE_SUITE(suiteName)                               \
   void Suite##suiteName(TinyTestRegistry* registry)
@@ -114,7 +115,7 @@ void Suite##suiteName(TinyTestRegistry* registry)                       \
 }
 
 #define TINYTEST_START_MAIN()                                           \
-  int main(int argc, char* argv[])                                      \
+  int main()                                                            \
   {                                                                     \
     TinyTestRegistry registry;                                          \
     registry.m_headSuite = NULL
